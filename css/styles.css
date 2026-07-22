@@ -1,0 +1,530 @@
+/* ============================================================
+   APERTURE GALLERY — STYLESHEET
+   Palette: royal blue, white, grey, and black — a premium,
+   editorial look with generous whitespace and crisp contrast.
+   Mobile-first. Breakpoints widen at 600px (tablet) and 960px (desktop).
+   ============================================================ */
+
+/* ---------- Design tokens ---------- */
+:root {
+  /* Core palette */
+  --color-white: #ffffff;
+  --color-black: #0b0d12;
+
+  --color-royal-blue: #2a46e8;       /* primary accent */
+  --color-royal-blue-dark: #16244f;  /* deep navy — pairs as a second "shade" of blue */
+  --color-royal-blue-light: #eef1ff; /* pale blue tint for soft backgrounds/hover */
+
+  --color-grey-900: #1f2430; /* near-black body text */
+  --color-grey-600: #5c6270; /* secondary / muted text */
+  --color-grey-300: #d7dae1; /* borders, hairlines */
+  --color-grey-100: #f4f5f7; /* soft surface background */
+
+  /* Semantic aliases */
+  --color-bg: var(--color-white);
+  --color-surface: var(--color-white);
+  --color-surface-alt: var(--color-grey-100);
+  --color-text: var(--color-grey-900);
+  --color-muted: var(--color-grey-600);
+  --color-hairline: var(--color-grey-300);
+  --color-accent: var(--color-royal-blue);
+
+  /* One accent per category, kept inside the royal-blue / grey / black family
+     so every "room" of the gallery still reads as part of one palette */
+  --color-nature: var(--color-royal-blue);
+  --color-architecture: var(--color-royal-blue-dark);
+  --color-people: var(--color-grey-600);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --shadow-card: 0 1px 2px rgba(11, 13, 18, 0.05), 0 14px 28px -14px rgba(11, 13, 18, 0.18);
+  --shadow-card-hover: 0 4px 10px rgba(11, 13, 18, 0.06), 0 24px 48px -18px rgba(42, 70, 232, 0.28);
+  --shadow-lightbox: 0 30px 80px -20px rgba(0, 0, 0, 0.55);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- Reset & base ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Consistent, visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Site header ---------- */
+.site-header {
+  padding: 4rem 1.25rem 2.25rem;
+  text-align: center;
+  background: linear-gradient(180deg, var(--color-black) 0%, var(--color-royal-blue-dark) 130%);
+  color: var(--color-white);
+}
+
+.site-header__inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.site-header__eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  opacity: 0.55;
+}
+
+.site-header__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 8vw, 4.25rem);
+  letter-spacing: -0.01em;
+}
+
+.site-header__subtitle {
+  margin: 0.85rem 0 0;
+  color: var(--color-grey-300);
+  font-size: 0.98rem;
+  font-style: italic;
+  font-family: var(--font-display);
+}
+
+/* ---------- Filter bar ---------- */
+.filter-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-hairline);
+  padding: 0.9rem 1.25rem;
+}
+
+.filter-bar__buttons {
+  display: flex;
+  gap: 0.6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px; /* room for focus outline */
+}
+
+.filter-bar__buttons::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-white);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-muted);
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: border-color 0.25s var(--ease-out), color 0.25s var(--ease-out),
+    background 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+}
+
+.filter-btn:hover {
+  color: var(--color-text);
+  border-color: var(--color-royal-blue);
+  box-shadow: 0 0 0 3px var(--color-royal-blue-light);
+}
+
+.filter-btn.is-active {
+  color: var(--color-white);
+  background: var(--color-royal-blue);
+  border-color: var(--color-royal-blue);
+}
+
+.filter-btn__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+}
+
+.filter-btn__dot--nature {
+  background: var(--color-nature);
+}
+.filter-btn__dot--architecture {
+  background: var(--color-architecture);
+}
+.filter-btn__dot--people {
+  background: var(--color-people);
+}
+
+.filter-btn.is-active .filter-btn__dot {
+  background: var(--color-white);
+}
+
+/* ---------- Gallery grid ---------- */
+.gallery {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: single column */
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr); /* tablet: two columns */
+    gap: 1.25rem;
+    padding: 2rem 1.5rem 3.5rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .gallery {
+    grid-template-columns: repeat(3, 1fr); /* desktop: three columns */
+    gap: 1.5rem;
+    padding: 2.5rem 2rem 4.5rem;
+  }
+}
+
+.gallery-empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 2rem;
+  font-style: italic;
+  font-family: var(--font-display);
+}
+
+/* ---------- Gallery item card ---------- */
+.gallery-item {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-hairline);
+  cursor: pointer;
+  isolation: isolate;
+  transition: box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out),
+    border-color 0.35s var(--ease-out);
+
+  /* entrance animation, staggered via inline --delay in JS */
+  opacity: 0;
+  transform: translateY(14px);
+  animation: itemIn 0.6s var(--ease-out) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+.gallery-item:hover,
+.gallery-item:focus-within {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+  border-color: var(--color-royal-blue);
+}
+
+@keyframes itemIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gallery-item__frame {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-grey-100);
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out), filter 0.6s var(--ease-out);
+}
+
+/* Top accent bar — colored per category, the gallery's "room marker" */
+.gallery-item__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2;
+}
+
+.gallery-item[data-category="nature"] .gallery-item__accent {
+  background: var(--color-nature);
+}
+.gallery-item[data-category="architecture"] .gallery-item__accent {
+  background: var(--color-architecture);
+}
+.gallery-item[data-category="people"] .gallery-item__accent {
+  background: var(--color-people);
+}
+
+/* Caption plate slides up from the bottom on hover/focus, like a museum label */
+.gallery-item__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.1rem 1rem 0.85rem;
+  background: linear-gradient(to top, rgba(11, 13, 18, 0.85), rgba(11, 13, 18, 0));
+  transform: translateY(6px);
+  opacity: 0;
+  transition: transform 0.35s var(--ease-out), opacity 0.35s var(--ease-out);
+}
+
+.gallery-item__category {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  opacity: 0.75;
+  margin-bottom: 0.2rem;
+}
+
+.gallery-item__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.gallery-item:hover .gallery-image,
+.gallery-item:focus-within .gallery-image {
+  transform: scale(1.06);
+}
+
+.gallery-item:hover .gallery-item__caption,
+.gallery-item:focus-within .gallery-item__caption {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Filtered-out items are removed from layout entirely */
+.gallery-item.is-hidden {
+  display: none;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1.25rem 3rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--color-hairline);
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 13, 18, 0.92);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s var(--ease-out);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.lightbox__stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1rem 2rem;
+}
+
+.lightbox__figure {
+  margin: 0;
+  max-width: 900px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: zoomIn 0.35s var(--ease-out);
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+.lightbox__image {
+  max-width: 100%;
+  max-height: 68vh;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lightbox);
+  border: 2px solid var(--color-white);
+  /* Border color is set per-category via inline style in JS */
+}
+
+.lightbox__caption {
+  margin-top: 1.1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.lightbox__category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+.lightbox__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-white);
+}
+
+.lightbox__count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-grey-300);
+}
+
+/* Close button */
+.lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+
+.lightbox__close:hover {
+  background: var(--color-royal-blue);
+  transform: rotate(90deg);
+}
+
+/* Prev / next navigation */
+.lightbox__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+
+.lightbox__nav:hover {
+  background: var(--color-royal-blue);
+  border-color: var(--color-royal-blue);
+}
+
+.lightbox__nav--prev {
+  left: 0.5rem;
+}
+
+.lightbox__nav--next {
+  right: 0.5rem;
+}
+
+@media (min-width: 700px) {
+  .lightbox__nav--prev {
+    left: 1.5rem;
+  }
+  .lightbox__nav--next {
+    right: 1.5rem;
+  }
+}
