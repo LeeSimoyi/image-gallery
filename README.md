@@ -45,57 +45,6 @@ image-gallery/
 └── README.md               # This file
 ```
 
-## Running it locally
-
-No installation or build tools are required.
-
-1. Unzip the project folder.
-2. Open `index.html` directly in any modern browser (double-click it, or drag it into a browser window).
-
-That's it — the gallery works straight from the file system.
-
-**Optional:** if your browser restricts certain features when opening files directly (rare for this project, but common for larger apps), you can serve the folder locally instead:
-
-```bash
-# from inside the image-gallery folder
-python3 -m http.server 8000
-# then visit http://localhost:8000
-```
-
-## Using your own photos
-
-All image content lives in one place: the `imageData` array at the top of `js/script.js`.
-Each entry looks like this:
-
-```js
-{
-  title: "Ridge Line at Dawn",
-  category: "nature",       // must be "nature", "architecture", or "people"
-  src: "path/or/url/to/image.jpg",
-  alt: "Descriptive alt text for accessibility",
-}
-```
-
-To add, remove, or replace photos, just edit this array — the grid, filters, and lightbox
-all read from it automatically. To add a new category, you'll also want to:
-
-1. Add a new `<button>` inside `#filterButtons` in `index.html`.
-2. Add matching color variables and a `.filter-btn__dot--{category}` /
-   `.gallery-item[data-category="{category}"]` rule in `css/styles.css`.
-3. Add the category to `CATEGORY_COLORS` and `CATEGORY_LABELS` in `js/script.js`.
-
-## Notes on images
-
-The sample photos are loaded from Unsplash's CDN for demonstration purposes, so an internet
-connection is needed to see them load. Swap in your own local image files (e.g. inside an
-`assets/` folder) at any time by changing the `src` values in `js/script.js` — everything else
-will keep working unchanged.
-
-## Customizing the favicon
-
-Replace `assets/favicon.svg` with your own square icon (SVG recommended, but a `.png` or
-`.ico` works too if you update the `<link rel="icon">` paths in `index.html` to match).
-
 ## Browser support
 
 Built with standard, widely supported CSS and JavaScript (CSS Grid, `aspect-ratio`, ES6+).
