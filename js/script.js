@@ -12,9 +12,7 @@
 (function () {
   "use strict";
 
-  /* ---------- 1. Image data ----------
-     Swap these objects for your own photos any time — every other
-     part of the app (grid, filters, lightbox) reads from this array. */
+  /* ---------- 1. Image data ---------- */
   const imageData = [
     {
       title: "Ridge Line at Dawn",
